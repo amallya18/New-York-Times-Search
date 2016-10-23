@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_business"
+            android:title="Business" />
+        <item
+            android:id="@+id/nav_education"
+            android:title="Education" />
+        <item
+            android:id="@+id/nav_national"
+            android:title="National" />
+        <item
+            android:id="@+id/nav_politics"
+            android:title="Politics"/>
+        <item
+            android:id="@+id/nav_health"
+            android:title="Health"/>
+        <item
+            android:id="@+id/nav_tech"
+            android:title="Technology"/>
+    </group>
+</menu>
