@@ -31,12 +31,13 @@ public class NetworkHelper{
                               ArrayList<News> newsList,
                               NewsAdapter adapter){
 
+        /*
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UrlUtils.getNytUrl())
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
+                .build();*/
 
-        ApiEndPointInterface apiService = retrofit.create(ApiEndPointInterface.class);
+        ApiEndPointInterface apiService = NetworkFactory.getService();
 
         Call<NewsList> call = apiService.getNews(UrlUtils.getNytKey(),
                 filter.getBeginDate(),
@@ -48,16 +49,10 @@ public class NetworkHelper{
         call.enqueue(new Callback<NewsList>() {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
-                int statusCode = response.code();
-                System.out.println("Status Code: "+statusCode);
-                System.out.println("Response: "+call.request().url());
                 NewsList news = response.body();
-                Gson gson = new Gson();
-                String json = gson.toJson(news);
-                System.out.println("Response Body to string "+json);
+                print(news);
                 newsList.addAll(news.getResponse().getDocs());
                 adapter.notifyDataSetChanged();
-                System.out.println();
             }
 
             @Override
@@ -70,65 +65,29 @@ public class NetworkHelper{
         });
     }
 
-
     public void fetchTopStories(String type,
                               final View parent,
                               ArrayList<News> newsList,
                               NewsAdapter adapter){
 
-        System.out.println("fetch stories called");
-        Retrofit retrofit = new Retrofit.Builder()
+        /*Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UrlUtils.getNytUrl())
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiEndPointInterface apiService = retrofit.create(ApiEndPointInterface.class);
-
-        //Call<TopStories> call;
-        String val = null;
-        switch(type){
-            case "HOME":
-                 val = "news_desk:(\"Home\")";
-                 break;
-            case "EDUCATION":
-                val = "news_desk:(\"Education\")";
-                break;
-            case "TECH":
-                val = "news_desk:(\"Technology\")";
-                break;
-            case "NATIONAL":
-                val = "news_desk:(\"National\")";
-                break;
-            case "POLITICS":
-                val = "news_desk:(\"Politics\")";
-                break;
-            case "BUSINESS":
-                val = "news_desk:(\"Business\")";
-                break;
-            case "HEALTH":
-                val = "news_desk:(\"Health\")";
-                break;
-            default:
-                val = "news_desk:(\"Home\")";
-                break;
-        }
-
+                .build();*/
+        ApiEndPointInterface apiService = NetworkFactory.getService();
+        //ApiEndPointInterface apiService = retrofit.create(ApiEndPointInterface.class);
+        String val = getStoryType(type);
         Call<NewsList> call = apiService.getNews(UrlUtils.getNytKey(), null, null, val, null, 1);
 
         call.enqueue(new Callback<NewsList>() {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 int statusCode = response.code();
-                System.out.println("Status Code: "+statusCode);
-                System.out.println("Response: "+call.request().url());
                 NewsList news = response.body();
-                Gson gson = new Gson();
-                String json = gson.toJson(news);
-                System.out.println("Response Body to string "+json);
+                print(news);
                 newsList.clear();
                 newsList.addAll(news.getResponse().getDocs());
                 adapter.notifyDataSetChanged();
-                System.out.println();
             }
 
             @Override
@@ -139,5 +98,32 @@ public class NetworkHelper{
                 }
             }
         });
+    }
+
+    private void print(NewsList news){
+        Gson gson = new Gson();
+        String json = gson.toJson(news);
+        System.out.println("Json recived:" +gson);
+    }
+
+    private String getStoryType(String type){
+        switch(type){
+            case "HOME":
+                return "news_desk:(\"Home\")";
+            case "EDUCATION":
+                return "news_desk:(\"Education\")";
+            case "TECH":
+                return "news_desk:(\"Technology\")";
+            case "NATIONAL":
+                return "news_desk:(\"National\")";
+            case "POLITICS":
+                return "news_desk:(\"Politics\")";
+            case "BUSINESS":
+                return "news_desk:(\"Business\")";
+            case "HEALTH":
+                return "news_desk:(\"Health\")";
+            default:
+                return "news_desk:(\"Home\")";
+        }
     }
 }

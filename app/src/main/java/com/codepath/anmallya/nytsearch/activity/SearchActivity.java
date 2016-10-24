@@ -62,6 +62,21 @@ public class SearchActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+        setSearchView(searchItem);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            showSettingsDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setSearchView(MenuItem searchItem){
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchItem.expandActionView();
         searchView.requestFocus();
@@ -77,17 +92,6 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            showSettingsDialog();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setRecyclerView(){
