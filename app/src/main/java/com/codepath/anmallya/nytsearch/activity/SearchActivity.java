@@ -1,6 +1,7 @@
 package com.codepath.anmallya.nytsearch.activity;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.View;
 
 import com.codepath.anmallya.nytsearch.R;
 import com.codepath.anmallya.nytsearch.adapter.NewsAdapter;
+import com.codepath.anmallya.nytsearch.databinding.ActivitySearchBinding;
 import com.codepath.anmallya.nytsearch.fragment.FilterFragment;
 import com.codepath.anmallya.nytsearch.helper.Constants;
 import com.codepath.anmallya.nytsearch.helper.EndlessRecyclerViewScrollListener;
@@ -44,11 +46,12 @@ public class SearchActivity extends AppCompatActivity {
     private String query = null;
     private RecyclerView rvNews;
     private StaggeredGridLayoutManager gridLayoutManager;
+    private ActivitySearchBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
         Filter.getInstance().resetFilter();
         setRecyclerView();
         setInfiniteScroll();
@@ -65,16 +68,10 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                newsList.clear();
-                adapter.notifyDataSetChanged();
-                System.out.println("Filter Content in SA"+Filter.getInstance().toString());
-                SearchActivity.this.query = query;
-                Filter.getInstance().setFilterSearchQuery(query);
-                (new NetworkHelper()).fetchNewsList(1, findViewById(R.id.root), Filter.getInstance(), newsList, adapter);
+                getSearchItems(query);
                 searchView.clearFocus();
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -97,7 +94,8 @@ public class SearchActivity extends AppCompatActivity {
         newsList = new ArrayList<>();
         gridLayoutManager =
                 new StaggeredGridLayoutManager(Constants.SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
-        rvNews = (RecyclerView)findViewById(R.id.rvNewsSearchItems);
+        //rvNews = (RecyclerView)findViewById(R.id.rvNewsSearchItems);
+        rvNews = binding.rvNewsSearchItems;
         adapter = new NewsAdapter(this, newsList);
         rvNews.setAdapter(adapter);
         rvNews.setLayoutManager(gridLayoutManager);
@@ -111,12 +109,20 @@ public class SearchActivity extends AppCompatActivity {
         );
     }
 
+    private void getSearchItems(String query){
+        newsList.clear();
+        adapter.notifyDataSetChanged();
+        SearchActivity.this.query = query;
+        Filter.getInstance().setFilterSearchQuery(query);
+        (new NetworkHelper()).fetchNewsList(1, findViewById(R.id.root), Filter.getInstance(), newsList, adapter);
+    }
+
     private void setInfiniteScroll(){
         rvNews.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 Filter.getInstance().setFilterSearchQuery(SearchActivity.this.query);
-                (new NetworkHelper()).fetchNewsList(page+1, findViewById(R.id.root), Filter.getInstance(), newsList, adapter);
+                (new NetworkHelper()).fetchNewsList(page+1, binding.root, Filter.getInstance(), newsList, adapter);
             }
         });
     }
