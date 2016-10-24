@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity
 
     private void setViews(){
         setNavigationDrawerAndToolbar();
-        setFloatingActionBar();
         setRecyclerView();
         fetchData("Home");
     }
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.nav_home) {
             getSupportActionBar().setTitle("Home");
             fetchData("HOME");
@@ -108,16 +106,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setFloatingActionBar(){
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
     Toolbar toolbar = null;
     private void setNavigationDrawerAndToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

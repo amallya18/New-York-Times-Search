@@ -104,7 +104,10 @@ public class NewsAdapter extends
         News news = newsList.get(position);
         vh2.getTvSnippet().setText(news.getSnippet());
         vh2.getTvNews().setText(news.getHeadline().getMain());
-
+        ImageButton ibShare = vh2.getIbShare();
+        ibShare.setOnClickListener(v -> {
+            shareUrl(news);
+        });
         TextView textViewSource = vh2.getTvSource();
         textViewSource.setText(news.getSource());
     }
@@ -116,18 +119,4 @@ public class NewsAdapter extends
         sendIntent.setType("text/plain");
         getContext().startActivity(sendIntent);
     }
-
-
-
-    /*
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView nameTextView;
-        public ImageView ivNews;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            nameTextView = (TextView) itemView.findViewById(R.id.item_name);
-            ivNews = (ImageView) itemView.findViewById(R.id.news_image);
-        }
-    }*/
 }

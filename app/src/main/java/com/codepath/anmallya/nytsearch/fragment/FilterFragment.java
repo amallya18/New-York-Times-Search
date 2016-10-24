@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.codepath.anmallya.nytsearch.R;
+import com.codepath.anmallya.nytsearch.helper.Constants;
+import com.codepath.anmallya.nytsearch.helper.Utils;
 import com.codepath.anmallya.nytsearch.model.Filter;
 
 import java.util.ArrayList;
@@ -31,30 +33,26 @@ public class FilterFragment extends DialogFragment implements DatePickerFragment
 
     private EditText mEditText;
     private Spinner mSpinner;
-    private CheckBox cbSports; private CheckBox cbFashion; private CheckBox cbArts;
-    private Filter filter;
+    private CheckBox cbSports, cbFashion, cbArts, cbEdu, cbHealth;
 
     @Override
     public void onStart()
     {
         super.onStart();
-
-        // safety check
         if (getDialog() == null)
             return;
+        setDimensions();
+    }
 
-        int dialogWidth = 1300;
-        int dialogHeight = 1300;
-
+    private void setDimensions(){
+        int dialogHeight = Utils.convertDpToPixel(Constants.DIALOG_FRAGMENT_HEIGHT);
+        int dialogWidth = Utils.convertDpToPixel(Constants.DIALOG_FRAGMENT_WIDTH);
+        System.out.println("#############"+dialogHeight+" "+dialogWidth);
         getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
-
     }
 
 
     public FilterFragment() {
-        // Empty constructor is required for DialogFragment
-        // Make sure not to add arguments to the constructor
-        // Use `newInstance` instead as shown below
     }
 
     public static FilterFragment newInstance(String title) {
@@ -69,16 +67,45 @@ public class FilterFragment extends DialogFragment implements DatePickerFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filters, container);
-        mEditText = (EditText) view.findViewById(R.id.et_date);
-        mSpinner=(Spinner) view.findViewById(R.id.mySpinner);
-
-        cbSports = (CheckBox)view.findViewById(R.id.checkbox_sports);
-        cbArts = (CheckBox)view.findViewById(R.id.checkbox_arts);
-        cbFashion = (CheckBox)view.findViewById(R.id.checkbox_fashion);
-
+        setViews(view);
+        addValues();
         setButtons(view);
         setEditText(view);
         return view;
+    }
+
+    private void setViews(View view){
+        mEditText = (EditText) view.findViewById(R.id.et_date);
+        mSpinner=(Spinner) view.findViewById(R.id.mySpinner);
+        cbSports = (CheckBox)view.findViewById(R.id.checkbox_sports);
+        cbArts = (CheckBox)view.findViewById(R.id.checkbox_arts);
+        cbFashion = (CheckBox)view.findViewById(R.id.checkbox_fashion);
+        cbEdu = (CheckBox)view.findViewById(R.id.checkbox_education);
+        cbHealth = (CheckBox)view.findViewById(R.id.checkbox_health);
+    }
+
+    private void addValues(){
+        Filter filter = Filter.getInstance();
+        mEditText.setText(filter.getBeginDateFormatted());
+        for(String s:filter.getNewsDesk()){
+            switch(s){
+                case("Sports"):
+                     cbSports.setChecked(true);
+                     break;
+                case("Arts"):
+                    cbArts.setChecked(true);
+                    break;
+                case("Fashion & Style"):
+                    cbFashion.setChecked(true);
+                    break;
+                case("Education"):
+                    cbEdu.setChecked(true);
+                    break;
+                case("Health"):
+                    cbHealth.setChecked(true);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -93,28 +120,22 @@ public class FilterFragment extends DialogFragment implements DatePickerFragment
             @Override
             public void onClick(View v) {
                 showDatePickerDialog();
-                Toast.makeText(getActivity(),"in focus",Toast.LENGTH_SHORT).show();
             }
         });
     }
     private void saveClicked(){
-        System.out.println("Save Pressed -");
         Filter filter = Filter.getInstance();
         filter.setSort(mSpinner.getSelectedItem().toString());
         ArrayList<String> newsDesk = new ArrayList<String>();
-        if(cbSports.isChecked()){
-            newsDesk.add("Sports");
-        }
-        if(cbArts.isChecked()){
-            newsDesk.add("Arts");
-        }
-        if(cbFashion.isChecked()){
-            newsDesk.add("Fashion & Style");
-        }
+        if(cbSports.isChecked()) newsDesk.add("Sports");
+        if(cbArts.isChecked()) newsDesk.add("Arts");
+        if(cbFashion.isChecked()) newsDesk.add("Fashion & Style");
+        if(cbEdu.isChecked()) newsDesk.add("Education");
+        if(cbHealth.isChecked()) newsDesk.add("Health");
+
         filter.setNewsDesk(newsDesk);
         filter.setBeginDateFormatted(mEditText.getText().toString());
         filter.setBeginDate((String)mEditText.getTag());
-        System.out.println(filter.toString());
         getDialog().dismiss();
     }
 
@@ -145,19 +166,9 @@ public class FilterFragment extends DialogFragment implements DatePickerFragment
 
     void setButtons(View view){
         Button saveButton = (Button) view.findViewById(R.id.save_btn);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveClicked();
-            }
-        });
+        saveButton.setOnClickListener(v -> saveClicked());
 
         Button cancelButton = (Button) view.findViewById(R.id.cancel_btn);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancelClicked();
-            }
-        });
+        cancelButton.setOnClickListener(v -> cancelClicked());
     }
 }

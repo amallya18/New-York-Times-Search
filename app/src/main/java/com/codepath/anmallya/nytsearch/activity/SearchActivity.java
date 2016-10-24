@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -48,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        Filter.getInstance().resetFilter();
         setRecyclerView();
         setInfiniteScroll();
     }
@@ -99,6 +101,14 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new NewsAdapter(this, newsList);
         rvNews.setAdapter(adapter);
         rvNews.setLayoutManager(gridLayoutManager);
+        rvNews.setItemAnimator(new SlideInUpAnimator());
+        ItemClickSupport.addTo(rvNews).setOnItemClickListener(
+                (recyclerView, position, v) -> {
+                    Intent intent = new Intent(SearchActivity.this, WebViewActivity.class);
+                    intent.putExtra("news", Parcels.wrap(newsList.get(position)));
+                    startActivity(intent);
+                }
+        );
     }
 
     private void setInfiniteScroll(){
@@ -113,8 +123,8 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showSettingsDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        FilterFragment editNameDialogFragment = FilterFragment.newInstance("Some Title");
-        editNameDialogFragment.show(fm, "fragment_edit_name");
+        FilterFragment editNameDialogFragment = FilterFragment.newInstance("Settings Dialog");
+        editNameDialogFragment.show(fm, "fragment_settings_name");
     }
 
 }

@@ -30,7 +30,6 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK) ) {
-            //webView.clearHistory(); // clear history
             finish();
             return true;
         }
@@ -51,5 +50,13 @@ public class WebViewActivity extends AppCompatActivity {
         builder.setActionButton(bitmap, "Share Link", pendingIntent, true);
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(url));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == REQUEST_CODE) {
+           finish();
+        }
     }
 }

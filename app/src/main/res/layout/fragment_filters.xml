@@ -90,7 +90,7 @@
     </EditText>
 
     <TextView
-        android:layout_marginTop="@dimen/filter_fragment_item_margin_top"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="@dimen/filter_fragment_item_margin_top"
         android:id="@+id/tv_news_desk"
         android:layout_below="@id/tv_date"
@@ -106,7 +106,7 @@
     <CheckBox
         android:layout_alignBaseline="@id/tv_news_desk"
         android:layout_toRightOf="@id/tv_news_desk"
-        android:layout_marginTop="@dimen/filter_fragment_item_margin_top"
+        android:layout_marginTop="15dp"
         android:layout_below="@id/tv_date"
         android:id="@+id/checkbox_sports"
         android:layout_width="wrap_content"
@@ -120,7 +120,6 @@
         android:layout_height="wrap_content"
         android:text="Arts" />
     <CheckBox
-        android:layout_marginBottom="@dimen/filter_fragment_item_margin_top"
         android:id="@+id/checkbox_fashion"
         android:layout_alignStart="@id/checkbox_arts"
         android:layout_alignLeft="@id/checkbox_arts"
@@ -128,8 +127,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fashion and Style" />
-
-
+    <CheckBox
+        android:id="@+id/checkbox_health"
+        android:layout_alignStart="@id/checkbox_fashion"
+        android:layout_alignLeft="@id/checkbox_fashion"
+        android:layout_below="@id/checkbox_fashion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Health" />
+    <CheckBox
+        android:layout_marginBottom="@dimen/filter_fragment_item_margin_top"
+        android:id="@+id/checkbox_education"
+        android:layout_alignStart="@id/checkbox_health"
+        android:layout_alignLeft="@id/checkbox_health"
+        android:layout_below="@id/checkbox_health"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Education" />
 
     <LinearLayout
         android:layout_alignParentBottom="true"
@@ -140,12 +154,14 @@
         android:weightSum="1">
 
         <Button
+            style="?android:attr/borderlessButtonStyle"
             android:id="@+id/cancel_btn"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:text="Cancel"/>
         <Button
+            style="?android:attr/borderlessButtonStyle"
             android:id="@+id/save_btn"
             android:layout_height="wrap_content"
             android:layout_width="0dp"

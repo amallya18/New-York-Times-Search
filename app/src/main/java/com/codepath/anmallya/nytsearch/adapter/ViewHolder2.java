@@ -2,6 +2,7 @@ package com.codepath.anmallya.nytsearch.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +13,15 @@ import com.codepath.anmallya.nytsearch.R;
  */
 public class ViewHolder2 extends RecyclerView.ViewHolder {
 
+    public ImageButton getIbShare() {
+        return ibShare;
+    }
 
+    public void setIbShare(ImageButton ibShare) {
+        this.ibShare = ibShare;
+    }
+
+    private ImageButton ibShare;
     public TextView getTvSource() {
         return tvSource;
     }
@@ -47,5 +56,6 @@ public class ViewHolder2 extends RecyclerView.ViewHolder {
         tvNews = (TextView) v.findViewById(R.id.item_name);
         tvSnippet = (TextView) v.findViewById(R.id.item_snippet);
         setTvSource((TextView) v.findViewById(R.id.item_source));
+        setIbShare((ImageButton) v.findViewById(R.id.news_share));
     }
 }

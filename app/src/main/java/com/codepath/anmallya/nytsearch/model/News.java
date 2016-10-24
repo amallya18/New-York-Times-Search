@@ -25,6 +25,7 @@ public class News {
         this.title = title;
     }
 
+    @Transient
     private String title;
 
     @JsonProperty("web_url")

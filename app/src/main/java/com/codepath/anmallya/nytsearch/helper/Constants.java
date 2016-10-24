@@ -5,4 +5,7 @@ package com.codepath.anmallya.nytsearch.helper;
  */
 public class Constants {
     public static final int SPAN_COUNT = 2;
+
+    public static final int DIALOG_FRAGMENT_HEIGHT = 450;
+    public static final int DIALOG_FRAGMENT_WIDTH = 400;
 }

@@ -53,14 +53,21 @@ public class Filter {
     public void setNewsDesk(ArrayList<String> newsDesk) {
         this.newsDesk = newsDesk;
         StringBuilder sb = new StringBuilder();
-        sb.append("news_desk:(");
+        if(newsDesk.size()>0){
+            sb.append("news_desk:(");
+        }else{
+            sb.append("news_desk:()");
+            return;
+        }
         for(String item:newsDesk){
             sb.append("\"");
             sb.append(item);
             sb.append("\"");
             sb.append(" ");
         }
-        sb.append(")");
+        if(newsDesk.size()>0){
+            sb.append(")");
+        }
         newsDeskString = sb.toString();
     }
 
@@ -77,6 +84,15 @@ public class Filter {
             filter = new Filter();
         }
         return filter;
+    }
+
+    public void resetFilter(){
+        filterSearchQuery = null;
+        beginDate = null;
+        newsDesk = new ArrayList<>();
+        newsDeskString = null;
+        sort = "newest";
+        beginDateFormatted = null;
     }
 
     @Override
